@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.mapper.CategoryMapper">
+
+    <select id="getCategoryIds" resultType="java.lang.Long">
+        SELECT category_id from sg_article where `status` = '0' GROUP BY category_id
+    </select>
+    <select id="getCategoryList" resultType="com.yj.entity.Category">
+        select * from sg_category where `status` = '0'and id in
+        <foreach collection="categoryIds" item="ids"
+                 open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+    <select id="getCategoryName" resultType="java.lang.String">
+        select name from sg_category where id = #{categoryId} and `status` = '0'
+    </select>
+    <select id="getById" resultType="com.yj.entity.Category">
+        select * from sg_category where id = #{categoryId}
+    </select>
+
+</mapper>
