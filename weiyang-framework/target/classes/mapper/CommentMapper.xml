@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.mapper.CommentMapper">
+    <insert id="addComment">
+        insert into sg_comment(article_id,`type`,root_id,to_comment_user_id,to_comment_id,`content`) values (#{articleId},#{type},#{rootId},#{toCommentUserId},#{toCommentId},#{content})
+    </insert>
+
+
+    <select id="geArticleId" resultType="com.yj.entity.Comment">
+        select * from sg_comment where article_id = #{articleId} and root_id = #{rootId} and del_flag = 0
+        limit #{offset} , #{pageSize}
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from sg_comment where article_id = #{articleId} and del_flag = 0 and root_id = #{rootId}
+    </select>
+    <select id="getRootId" resultType="com.yj.entity.Comment">
+        select * from sg_comment where root_id = #{id} and del_flag = 0
+    </select>
+</mapper>
