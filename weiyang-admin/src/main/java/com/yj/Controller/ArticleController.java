@@ -14,10 +14,10 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @PostMapping
-    public ResponseResult add(@RequestBody AddArticleDto article){
-        return articleService.add(article);
-    }
+//    @PostMapping
+//    public ResponseResult add(@RequestBody AddArticleDto article){
+//        return articleService.add(article);
+//    }
 
     @GetMapping("/list")
     public ResponseResult list(Integer pageNum, Integer pageSize,String title,String summary){
