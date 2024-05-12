@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/Upload")
 public class UploadControllerAdmin {
     @Autowired
     private UploadService uploadService;
 
-    @PostMapping("/upload")
+    @PostMapping("/uploadFile")
     public ResponseResult uploadImg(@RequestParam("img") MultipartFile multipartFile){
         try {
             return uploadService.uploadImg(multipartFile);

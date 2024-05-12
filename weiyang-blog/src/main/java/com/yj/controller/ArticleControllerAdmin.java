@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/article-adm")
+@RequestMapping("/articleAdm")
 public class ArticleControllerAdmin {
     @Autowired
     private ArticleService articleService;

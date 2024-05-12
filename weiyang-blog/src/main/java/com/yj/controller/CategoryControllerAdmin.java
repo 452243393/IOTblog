@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category-adm")
+@RequestMapping("/categoryAdm")
 public class CategoryControllerAdmin {
     @Autowired
     private CategoryService categoryService;
