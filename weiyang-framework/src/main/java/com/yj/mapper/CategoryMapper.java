@@ -6,6 +6,7 @@ import com.yj.entity.Category;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 
 import java.util.List;
@@ -21,4 +22,9 @@ public interface CategoryMapper extends BaseMapper<Category> {
     String getCategoryName(@Param("categoryId") Long categoryId);
 
     Category getById(@Param("categoryId")Long categoryId);
+
+    @Select("Select count(*) from sys_category")
+    static int countCategory() {
+        return 0;
+    }
 }

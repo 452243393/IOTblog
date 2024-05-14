@@ -51,4 +51,8 @@ public class CategoryController {
             WebUtils.renderString(response, JSON.toJSONString(result));
         }
     }
+    @GetMapping("/list")
+    public ResponseResult queryCategory(Integer pageNum, Integer pageSize, String name, String description, String metaKeywords, String metaDescription, String status){
+          return categoryService.queryCategory(pageNum,pageSize,name,description,metaKeywords,metaDescription,status);
+    }
 }
