@@ -4,16 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yj.entity.Link;
-import com.yj.entity.Role;
+import com.yj.entity.Link;
 import com.yj.entity.vo.PageVo;
+import com.yj.entity.vo.LinkVo;
+import com.yj.exception.SystemException;
 import com.yj.mapper.LinkMapper;
 import com.yj.service.LinkService;
+import com.yj.utils.AppHttpCodeEnum;
 import com.yj.utils.BeanCopyUtils;
 import com.yj.utils.ResponseResult;
 import com.yj.utils.SystemConstants;
 import com.yj.entity.vo.LinkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -49,5 +53,48 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper,Link> implements Lin
         int total = LinkMapper.countLink();
         PageVo pageVo = new PageVo(page.getRecords(), total);
         return ResponseResult.successResult(pageVo);
+    }
+    @Override
+    public ResponseResult addLink(Link link) {
+        if(!StringUtils.hasText(link.getName())){
+            throw new SystemException(AppHttpCodeEnum.TAG_NAME_NOT_NULL);
+        }
+        save(link);
+        return ResponseResult.successResult();
+    }
+
+    @Override
+    public ResponseResult deleteLink(Long id) {
+        LambdaQueryWrapper<Link> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Link::getId, id);
+        if(linkMapper.delete(wrapper)>0)
+        {
+            return ResponseResult.successResult();
+        }else{
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseResult selectById(Long id) {
+        Link link =  linkMapper.selectById(id);
+        LinkVo linkVo = BeanCopyUtils.copyBean(link, LinkVo.class);
+        return ResponseResult.successResult(linkVo);
+    }
+
+    @Override
+    public ResponseResult updateLink(Link link) {
+        LambdaQueryWrapper<Link> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Link::getId,link.getId());
+        linkMapper.update(link,wrapper);
+        return ResponseResult.successResult();
+    }
+    @Override
+    public List<LinkVo> listAllLink() {
+        LambdaQueryWrapper<Link> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Link::getId,Link::getName);
+        List<Link> list = list(wrapper);
+        List<LinkVo> linkVos = BeanCopyUtils.copyBeanList(list, LinkVo.class);
+        return linkVos;
     }
 }

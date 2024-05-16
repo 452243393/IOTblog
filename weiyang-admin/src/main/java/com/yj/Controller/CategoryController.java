@@ -3,7 +3,9 @@ package com.yj.Controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.yj.entity.Category;
+import com.yj.entity.Category;
 import com.yj.entity.vo.ExcelCategoryVo;
+import com.yj.entity.vo.CategoryVo;
 import com.yj.service.CategoryService;
 import com.yj.utils.AppHttpCodeEnum;
 import com.yj.utils.BeanCopyUtils;
@@ -12,9 +14,7 @@ import com.yj.entity.vo.CategoryVo;
 import com.yj.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -55,4 +55,24 @@ public class CategoryController {
     public ResponseResult queryCategory(Integer pageNum, Integer pageSize, String name, String description, String metaKeywords, String metaDescription, String status){
           return categoryService.queryCategory(pageNum,pageSize,name,description,metaKeywords,metaDescription,status);
     }
+    @PostMapping
+    public ResponseResult addCategory(@RequestBody Category category){
+        return categoryService.addCategory(category);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteCategory(@PathVariable("id") Long id){
+        return categoryService.deleteCategory(id);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult selectById(@PathVariable("id") Long id){
+        return categoryService.selectById(id);
+    }
+
+    @PutMapping
+    public ResponseResult updateCategory(@RequestBody Category category){
+        return categoryService.updateCategory(category);
+    }
+
 }

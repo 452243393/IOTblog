@@ -4,13 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yj.entity.Role;
+import com.yj.entity.Tag;
 import com.yj.entity.User;
 import com.yj.entity.vo.PageVo;
+import com.yj.entity.vo.RoleVo;
+import com.yj.entity.vo.TagVo;
+import com.yj.entity.vo.UserVo;
+import com.yj.exception.SystemException;
 import com.yj.mapper.RoleMapper;
 import com.yj.service.RoleService;
+import com.yj.utils.AppHttpCodeEnum;
+import com.yj.utils.BeanCopyUtils;
 import com.yj.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,5 +59,49 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         int total = roleMapper.countRole();
         PageVo pageVo = new PageVo(page.getRecords(), total);
         return ResponseResult.successResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult addRole(Role role) {
+        if(!StringUtils.hasText(role.getRoleName())){
+            throw new SystemException(AppHttpCodeEnum.TAG_NAME_NOT_NULL);
+        }
+        save(role);
+        return ResponseResult.successResult();
+    }
+
+    @Override
+    public ResponseResult deleteRole(Long id) {
+        LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Role::getId, id);
+        if(roleMapper.delete(wrapper)>0)
+        {
+            return ResponseResult.successResult();
+        }else{
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseResult selectById(Long id) {
+        Role role =  roleMapper.selectById(id);
+        RoleVo roleVo = BeanCopyUtils.copyBean(role, RoleVo.class);
+        return ResponseResult.successResult(roleVo);
+    }
+
+    @Override
+    public ResponseResult updateRole(Role role) {
+        LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Role::getId,role.getId());
+        roleMapper.update(role,wrapper);
+        return ResponseResult.successResult();
+    }
+    @Override
+    public List<RoleVo> listAllRole() {
+        LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Role::getId,Role::getRoleName);
+        List<Role> list = list(wrapper);
+        List<RoleVo> roleVos = BeanCopyUtils.copyBeanList(list, RoleVo.class);
+        return roleVos;
     }
 }
