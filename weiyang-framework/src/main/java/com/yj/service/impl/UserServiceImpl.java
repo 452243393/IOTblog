@@ -3,11 +3,10 @@ package com.yj.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yj.entity.User;
 import com.yj.entity.Tag;
 import com.yj.entity.User;
-import com.yj.entity.vo.PageVo;
-import com.yj.entity.vo.TagListVo;
-import com.yj.entity.vo.UserVo;
+import com.yj.entity.vo.*;
 import com.yj.exception.SystemException;
 import com.yj.mapper.UserMapper;
 import com.yj.service.UserService;
@@ -15,11 +14,12 @@ import com.yj.utils.AppHttpCodeEnum;
 import com.yj.utils.BeanCopyUtils;
 import com.yj.utils.ResponseResult;
 import com.yj.utils.SecurityUtils;
-import com.yj.entity.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 
 @Service
@@ -155,5 +155,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         wrapper.eq(User::getId,user.getId());
         userMapper.update(user,wrapper);
         return ResponseResult.successResult();
+    }
+    @Override
+    public List<UserVo> listAllUser() {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(User::getId,User::getUserName);
+        List<User> list = list(wrapper);
+        List<UserVo> userVos = BeanCopyUtils.copyBeanList(list, UserVo.class);
+        return userVos;
     }
 }

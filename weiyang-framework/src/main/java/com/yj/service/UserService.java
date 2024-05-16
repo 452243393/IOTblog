@@ -3,7 +3,11 @@ package com.yj.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yj.entity.Tag;
 import com.yj.entity.User;
+import com.yj.entity.vo.LinkVo;
+import com.yj.entity.vo.UserVo;
 import com.yj.utils.ResponseResult;
+
+import java.util.List;
 
 public interface UserService extends IService<User> {
     User getById(Long id);
@@ -25,4 +29,6 @@ public interface UserService extends IService<User> {
     ResponseResult selectById(Long id);
 
     ResponseResult updateUser(User user);
+
+    List<UserVo> listAllUser();
 }

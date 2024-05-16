@@ -3,6 +3,8 @@ package com.yj.Controller;
 
 import com.yj.entity.Tag;
 import com.yj.entity.User;
+import com.yj.entity.vo.RoleVo;
+import com.yj.entity.vo.UserVo;
 import com.yj.mapper.UserMapper;
 import com.yj.service.UserService;
 import com.yj.utils.ResponseResult;
@@ -41,6 +43,12 @@ public class UserController {
     @PutMapping
     public ResponseResult updateUser(@RequestBody User user){
         return userService.updateUser(user);
+    }
+
+    @GetMapping("/listAllUser")
+    public ResponseResult listAllTag(){
+        List<UserVo> list = userService.listAllUser();
+        return ResponseResult.successResult(list);
     }
 
 }
