@@ -3,9 +3,11 @@ package com.yj.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yj.entity.Article;
+import com.yj.entity.Tag;
 import com.yj.entity.User;
 import com.yj.entity.vo.PageVo;
+import com.yj.entity.vo.TagListVo;
+import com.yj.entity.vo.UserVo;
 import com.yj.exception.SystemException;
 import com.yj.mapper.UserMapper;
 import com.yj.service.UserService;
@@ -117,5 +119,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         int total = userMapper.countUser();
         PageVo pageVo = new PageVo(page.getRecords(), total);
         return ResponseResult.successResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult addUser(User user) {
+        if(!StringUtils.hasText(user.getUserName())){
+            throw new SystemException(AppHttpCodeEnum.TAG_NAME_NOT_NULL);
+        }
+        save(user);
+        return ResponseResult.successResult();
+    }
+
+    @Override
+    public ResponseResult deleteUser(Long id) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId, id);
+        if(userMapper.delete(wrapper)>0)
+        {
+            return ResponseResult.successResult();
+        }else{
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseResult selectById(Long id) {
+        User user =  userMapper.selectById(id);
+        UserVo userVo = BeanCopyUtils.copyBean(user, UserVo.class);
+        return ResponseResult.successResult(userVo);
+    }
+
+    @Override
+    public ResponseResult updateUser(User user) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId,user.getId());
+        userMapper.update(user,wrapper);
+        return ResponseResult.successResult();
     }
 }
